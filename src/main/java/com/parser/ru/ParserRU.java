@@ -45,8 +45,6 @@ public class ParserRU {
 //     }
 
     public static List<ResultRU> receiveAllNewsResults() throws IOException{
-        List<ResultRU> results = new ArrayList<>();
-
         results.addAll(receivePolicyNewsResults().subList(0,5));
         results.addAll(receiveMobileNewsResults().subList(0,5));
         results.addAll(receiveAutoNewsResults().subList(0,5));
@@ -120,93 +118,15 @@ public class ParserRU {
 
     public static List<ResultRU> receiveSportNewsResults() throws IOException {
         List<ResultRU> results = new ArrayList<>();
-        results.addAll(receiveFootballResults());
-        results.addAll(receiveMMAResults());
-        results.addAll(receiveHockeyResults());
-        results.addAll(receiveBasketballResults());
-
-        Collections.shuffle(results);
-
-//        System.out.println("Parsing...");
-//        Document document = Jsoup.connect("https://www.sports.ru/news").get();
-//
-//        Elements aLinks = document.getElementsByClass("short-text");
-//
-//        aLinks.forEach(aLink -> {
-//            String url = (TextUtils.isEmpty(aLink.attr("href"))) ? "https://www.sports.ru/news" : aLink.attr("href");
-//            String text = (TextUtils.isEmpty(aLink.text())) ? "Спорт" : aLink.text();
-//
-//            results.add(new ResultRU(url, text, "SPORT_RU"));
-//        });
-
-        return results;
-    }
-
-    private static List<ResultRU> receiveFootballResults() throws IOException {
-        List<ResultRU> results = new ArrayList<>();
 
         System.out.println("Parsing...");
-        Document document = Jsoup.connect("https://www.sports.ru/football/#menu-sub").get();
-
-        Elements aLinks = document.getElementsByClass("h2");
-
-        aLinks.forEach(aLink -> {
-            String url = (TextUtils.isEmpty(aLink.attr("href"))) ? "https://www.sports.ru/football/#menu-sub" : aLink.attr("href");
-            String text = (TextUtils.isEmpty(aLink.text())) ? "Футбол" : aLink.text();
-
-            results.add(new ResultRU(url, text, "SPORT_RU"));
-        });
-
-        return results;
-    }
-
-    private static List<ResultRU> receiveHockeyResults() throws IOException {
-        List<ResultRU> results = new ArrayList<>();
-
-        System.out.println("Parsing...");
-        Document document = Jsoup.connect("https://www.sports.ru/hockey/news/").get();
+        Document document = Jsoup.connect("https://www.sports.ru/news").get();
 
         Elements aLinks = document.getElementsByClass("short-text");
 
         aLinks.forEach(aLink -> {
-            String url = (TextUtils.isEmpty(aLink.attr("href"))) ? "https://www.sports.ru/hockey/news/" : aLink.attr("href");
-            String text = (TextUtils.isEmpty(aLink.text())) ? "Хоккей" : aLink.text();
-
-            results.add(new ResultRU(url, text, "SPORT_RU"));
-        });
-
-        return results;
-    }
-
-    private static List<ResultRU> receiveBasketballResults() throws IOException {
-        List<ResultRU> results = new ArrayList<>();
-
-        System.out.println("Parsing...");
-        Document document = Jsoup.connect("https://www.sports.ru/basketball/news/#menu-sub").get();
-
-        Elements aLinks = document.getElementsByClass("short-text");
-
-        aLinks.forEach(aLink -> {
-            String url = (TextUtils.isEmpty(aLink.attr("href"))) ? "https://www.sports.ru/basketball/news/#menu-sub" : aLink.attr("href");
-            String text = (TextUtils.isEmpty(aLink.text())) ? "Баскетбол" : aLink.text();
-
-            results.add(new ResultRU(url, text, "SPORT_RU"));
-        });
-
-        return results;
-    }
-
-    private static List<ResultRU> receiveMMAResults() throws IOException {
-        List<ResultRU> results = new ArrayList<>();
-
-        System.out.println("Parsing...");
-        Document document = Jsoup.connect("https://www.sports.ru/boxing/#menu-sub").get();
-
-        Elements aLinks = document.getElementsByClass("h2");
-
-        aLinks.forEach(aLink -> {
-            String url = (TextUtils.isEmpty(aLink.attr("href"))) ? "https://www.sports.ru/boxing/#menu-sub" : aLink.attr("href");
-            String text = (TextUtils.isEmpty(aLink.text())) ? "MMA" : aLink.text();
+            String url = (TextUtils.isEmpty(aLink.attr("href"))) ? "https://www.sports.ru/news" : aLink.attr("href");
+            String text = (TextUtils.isEmpty(aLink.text())) ? "Спорт" : aLink.text();
 
             results.add(new ResultRU(url, text, "SPORT_RU"));
         });
