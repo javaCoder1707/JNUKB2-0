@@ -1,13 +1,5 @@
 package com.bot;
 
-
-import com.parser.ru.ParserRU;
-import com.parser.ru.ResultRU;
-import com.parser.uk.ParserUK;
-import com.parser.uk.ResultUK;
-import com.bot_db.BotDB;
-import com.window.JFrameWindow;
-
 import org.telegram.telegrambots.ApiContextInitializer;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.TelegramBotsApi;
@@ -17,15 +9,16 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.User;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiRequestException;
+import com.parser.ru.ParserRU;
+import com.parser.ru.ResultRU;
+import com.parser.uk.ParserUK;
+import com.parser.uk.ResultUK;
 
 import java.io.FileWriter;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class Bot extends TelegramLongPollingBot {
 
@@ -51,7 +44,7 @@ public class Bot extends TelegramLongPollingBot {
 
     public Bot() throws IOException {
     }
-
+    
     //Methods for updating variables(results)
     private void updateNewsResultsRU() throws IOException {
         this.policyNewsResultsRU = ParserRU.receivePolicyNewsResults();
@@ -70,21 +63,11 @@ public class Bot extends TelegramLongPollingBot {
     }
 
     public static void main(String[] args) {
-//        BasicConfigurator.configure();
-        JFrameWindow.createWindow();
         ApiContextInitializer.init();
         TelegramBotsApi botsApi = new TelegramBotsApi();
         try {
             botsApi.registerBot(new Bot());
         } catch (TelegramApiRequestException | IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void spy(Message message){
-        try (FileWriter writer = new FileWriter("C:\\Users\\lenovo\\Desktop\\secret.txt", true)){
-            writer.write(message.getFrom().getFirstName() + " " + message.getFrom().getLastName() + ": " + message.getText() + " " + new Date() + "\n");
-        } catch (IOException e) {
             e.printStackTrace();
         }
     }
@@ -103,8 +86,8 @@ public class Bot extends TelegramLongPollingBot {
 
     //Russian news sending methods
     private void sendNewsRU(Message message, List<ResultRU> newsResultsRU){
-        try(FileWriter writer = new FileWriter("C:\\Users\\lenovo\\Desktop\\dataBot.txt", true)){
-
+        try(FileWriter writer = new FileWriter("C:\\Users\\Тигр\\Desktop\\dataBot.txt", true)){
+            
             if(newsResultsRU.size() == 5){
                 newsResultsRU.forEach(newsResult -> sendMessage(message, newsResult.toString()));
                 this.updateNewsResultsRU();
@@ -127,7 +110,7 @@ public class Bot extends TelegramLongPollingBot {
     }
 
     private void sendAllNewsRU(Message message){
-        try(FileWriter writer = new FileWriter("C:\\Users\\lenovo\\Desktop\\dataBot.txt", true)) {
+        try(FileWriter writer = new FileWriter("C:\\Users\\Тигр\\Desktop\\dataBot.txt", true)) {
             allNewsResultsRU.forEach(allNewsResult -> sendMessage(message, allNewsResult.toString()));
             allNewsResultsRU = ParserRU.receiveAllNewsResults();
 
@@ -146,12 +129,12 @@ public class Bot extends TelegramLongPollingBot {
 
     //English news sending methods
     private void sendNewsUK(Message message, List<ResultUK> newsResultsUK){
-        try(FileWriter writer = new FileWriter("C:\\Users\\lenovo\\Desktop\\dataBot.txt", true)){
-
+        try(FileWriter writer = new FileWriter("C:\\Users\\Тигр\\Desktop\\dataBot.txt", true)){
+            
             if(newsResultsUK.size() == 4){
                 newsResultsUK.forEach(newsResult -> sendMessage(message, newsResult.toString()));
                 this.updateNewsResultsUK();
-
+                
                 return;
             }
 
@@ -164,6 +147,7 @@ public class Bot extends TelegramLongPollingBot {
 
             writer.write(newsResultsUK.get(0).getType() + ": Sent successfully to " + message.getFrom().getFirstName() + " " + message.getFrom().getLastName() + " on " + new Date() + "\n");
 
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -171,8 +155,8 @@ public class Bot extends TelegramLongPollingBot {
 
     private void sendAllNewsUK(Message message){
         try(FileWriter writer = new FileWriter("C:\\Users\\Тигр\\Desktop\\dataBot.txt", true)) {
-            allNewsResultsUK.forEach(allNewsResult -> sendMessage(message, allNewsResult.toString()));
-            allNewsResultsUK = ParserUK.receiveAllNewsResults();
+           allNewsResultsUK.forEach(allNewsResult -> sendMessage(message, allNewsResult.toString()));
+           allNewsResultsUK = ParserUK.receiveAllNewsResults();
 
             System.out.println("ALL_UK: Sent successfully to " + message.getFrom().getFirstName() + " " + message.getFrom().getLastName() + " on " + new Date());
             writer.write("ALL_UK: Sent successfully to " + message.getFrom().getFirstName() + " " + message.getFrom().getLastName() + " on " + new Date() + "\n");
@@ -205,7 +189,7 @@ public class Bot extends TelegramLongPollingBot {
                 sendMessage(message, "Choose language \n /russian (Привет) or /english (Hi, Hello)");
                 break;
 
-            //Russian commands
+           //Russian commands
             case "/russian":
             case "Привет":
             case "привет":
@@ -258,14 +242,14 @@ public class Bot extends TelegramLongPollingBot {
 
 
 
-            //English command
+            //English commands
             case "/english":
             case "hi":
             case "Hello":
             case "Hi":
             case "hello":
                 sendMessage(message,
-                        "Hi, " + message.getFrom().getFirstName() + "\uD83D\uDC4B\nto get the all news, enter the command \n /newsAll" +
+                            "Hi, " + message.getFrom().getFirstName() + "\uD83D\uDC4B\nto get the all news, enter the command \n /newsAll" +
                                 "\n" + "\n" +
                                 "To get news on the topic of UK \uD83C\uDDEC\uD83C\uDDE7 enter the command /newsUK \n" +
                                 "\n" +
@@ -313,7 +297,6 @@ public class Bot extends TelegramLongPollingBot {
                 break;
 
             default:
-                spy(message);
                 sendMessage(message, "This is invalid command!!!\n" + "Нет такой команды!!!");
                 sendMessage(message, "Enter:\nВведите:\n\n /start");
                 break;
@@ -324,7 +307,7 @@ public class Bot extends TelegramLongPollingBot {
 
 
         if(HOUR.format(new Date()).equals("23")){
-            try(FileWriter writer = new FileWriter("C:\\Users\\lenovo\\Desktop\\dataBot.txt", true)) {
+            try(FileWriter writer = new FileWriter("C:\\Users\\Тигр\\Desktop\\dataBot.txt", true)) {
                 writer.write("\n" + USERS.size() + " people used JavaNewsUKBot on " + FORMAT.format(new Date()) + " \n \n");
                 USERS.clear();
             } catch (IOException e) {
@@ -335,11 +318,11 @@ public class Bot extends TelegramLongPollingBot {
 
     @Override
     public String getBotUsername() {
-        return "javanewsbyvercix_bot";
+        return "BREAKING NEWS";
     }
 
     @Override
     public String getBotToken() {
-        return "5275086231:AAFaQGvpHtTzJhdvmc6mwSwekP9gKvldojo";
+        return "TOKEN";
     }
 }
